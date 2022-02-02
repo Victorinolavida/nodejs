@@ -1,6 +1,7 @@
 const { leerInput, inquirerMenu, pausa, listarLugares } = require("./helpers/inquirer");
 const Busquedas = require("./models/busquedas");
 require('dotenv').config()
+require('colors')
 
 
 const main=async ()=>{
@@ -22,25 +23,42 @@ const main=async ()=>{
       
         //Buscar los lugares
         const lugares=await busquedas.ciudad(termino)
-        const id=await listarLugares(lugares);
         
+        const id=await listarLugares(lugares);
+        if(id==='0') continue;
+
         //seleccionar el lugar
-        const lugarSel=lugares.find(lugar=>lugar.id===id)
+        const lugarSel=lugares.find(lugar=>lugar.id===id);
+        
+        //guadar en DB
+        busquedas.agregarHistorial(lugarSel.nombre);
+
+        const clima=await busquedas.climaLugar(lugarSel.lat, lugarSel.lng)
 
 
         //mostrar resultados
-
+        console.clear()
         console.log('\n Informacion de la ciudad\n '.green);
         console.log('Ciudad:',lugarSel.nombre);
         console.log('Lat:',lugarSel.lat);
         console.log('Lng:',lugarSel.lng);
-        console.log('Temperatura:');
-        console.log('Mínima:');
-        console.log('Máxima:');
+        console.log('Temperatura:',clima.temp);
+        console.log('Mínima:',clima.min);
+        console.log('Máxima:',clima.max);
+        console.log('Como está el clima: ',clima.desc.green)
 
+  
+        
         break;
     
-      default:
+        case 2:
+        busquedas.historialCapitalizado.forEach((lugar, i)=>{
+            const idx=`${i+1}.`.green
+          console.log(`${idx} ${lugar}`)
+          
+        })
+        
+   
         break;
     }
 

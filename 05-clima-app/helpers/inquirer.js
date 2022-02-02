@@ -13,7 +13,7 @@ const preguntas = [
         name: `${"1".green}. Buscar ciudad`,
       },
       {
-        value: 1,
+        value: 2,
         name: `${"2".green}. Historial`,
       },
       {
