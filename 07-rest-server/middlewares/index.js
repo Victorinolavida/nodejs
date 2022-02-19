@@ -4,10 +4,10 @@ const validarCampos = require('../middlewares/validar-campos');
 
 
 
+
 module.exports={
 
   ...validarCampos,
   ...validarRol,
-  ...valdiarJWT
-
+  ...valdiarJWT,
 }
