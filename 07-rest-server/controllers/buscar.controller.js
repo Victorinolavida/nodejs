@@ -81,7 +81,8 @@ const buscarProducto = async( termino='',res=response ) => {
   const esMongoId = ObjectId.isValid( termino );
 
   if( esMongoId ){
-    const productoDB = await producto.findById( termino );
+    const productoDB = await producto.findById( termino )
+                            .populate('categoria','nombre');
     return res.json({
       results:(productoDB?[productoDB]:[])
     });
@@ -99,7 +100,7 @@ const buscarProducto = async( termino='',res=response ) => {
      producto.find({ 
       $or: [{ nombre:regexp } ],
       $and: [{ estado:true }]
-     })
+     }).populate('categoria','nombre')
    ]);
 
   res.json({
