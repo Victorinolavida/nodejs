@@ -41,7 +41,7 @@ const actualizarProducto = async (req,res=response) => {
 
   const { usuario,estado,categoria,nombre,precio,descripcion }= req.body;
   const data = {
-    nombre,
+    nombre: nombre.toUpperCase(),
     precio,
     descripcion
   }
