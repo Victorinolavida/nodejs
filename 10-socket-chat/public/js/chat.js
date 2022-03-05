@@ -53,16 +53,68 @@ const conectarSocket = async() => {
     console.log('online')
   });
 
-  socket.on('recibir-mensaje', ()=>{});
+  socket.on('recibir-mensaje', dibujarMensajes);
 
-  socket.on('usuarios-activos', ( payload )=>{
-      console.log(payload)
+  socket.on('usuarios-activos', dibujarUsuarios )
+
+  socket.on('mensaje-privado', (payload) => {
+    console.log(payload)
+    console.log('olass')
   })
-
-  socket.on('mensaje-privado', ()=>{})
 
 };
 
+const dibujarUsuarios = ( usuarios = [] ) => {
+  let html = '';
+
+  usuarios.forEach( ({ nombre,uid }) => {
+
+    html += `
+      <li>
+        <p>
+          <h5 class="text-success"> ${ nombre } </h5>
+          <span class="fs-6 text-muted">${ uid }</span>
+        </p>
+      </li>
+    `
+  })
+  ulUsuarios.innerHTML = html;
+}
+
+
+
+const dibujarMensajes = ( mensajes = [] ) => {
+  let html = '';
+
+  mensajes.forEach( ({ nombre,mensaje }) => {
+
+    
+    html += `
+      <li>
+        <p>
+          <h5 class="text-primary"> ${ nombre } </h5>
+          <span>${ mensaje }</span>
+        </p>
+      </li>
+    `
+  })
+  ulMensajes.innerHTML = html;
+}
+
+txtMes.addEventListener( 'keyup', ({key})=>{
+  // console.log(key)
+  const msg = txtMes.value;
+  const uid = txtUid.value;
+
+  if ( key !== 'Enter' ) return;
+  if( msg.trim().length === 0 ) return;
+
+  socket.emit( 'enviar-mensaje', { msg,uid } )
+
+  txtMes.value = '';
+  txtUid.value= '';
+
+})
 
 
 const main = async() =>{
